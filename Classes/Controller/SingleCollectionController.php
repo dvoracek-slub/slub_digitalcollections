@@ -153,7 +153,6 @@ class SingleCollectionController extends \TYPO3\CMS\Extbase\Mvc\Controller\Actio
         }
 
         $this->view->assign('solrSearch', $solrSearch);
-        $this->view->assign('documents', $solrResults['documents']);
         $this->view->assign('metadata', $metadata);
         $this->view->assign('widgetPage', $widgetPage);
         $this->view->assign('lastSearch', $searchParams);

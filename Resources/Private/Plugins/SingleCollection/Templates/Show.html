@@ -61,7 +61,7 @@
       </div>
    </f:form>
 
-   <f:widget.paginate objects="{documents}" as="paginatedDocuments" configuration="{settings.list.paginate}">
+   <f:widget.paginate objects="{solrSearch}" as="paginatedDocuments" configuration="{settings.list.paginate}">
       <ol class="tx-dlf-abstracts">
          <f:for each="{paginatedDocuments}" as="document" iteration="docIterator">
             <f:variable name="docTitle" value="{f:if(condition:'{document.title}', then:'{document.title}', else:'{document.metsOrderlabel}')}" />
