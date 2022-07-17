@@ -30,6 +30,7 @@ use Kitodo\Dlf\Domain\Repository\DocumentRepository;
 use Kitodo\Dlf\Domain\Repository\StructureRepository;
 use Kitodo\Dlf\Domain\Repository\CollectionRepository;
 use Kitodo\Dlf\Domain\Repository\MetadataRepository;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class SingleCollectionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {
@@ -143,6 +144,30 @@ class SingleCollectionController extends \TYPO3\CMS\Extbase\Mvc\Controller\Actio
 
         // get all sortable Metadata from Kitodo.Presentation
         $metadata = $this->metadataRepository->findByIsSortable(true);
+        $sortableMetadata = [];
+        foreach ($metadata as $entry) {
+            $sortableMetadata[] = [
+                'indexName' => $entry->getIndexName(),
+                'label' => LocalizationUtility::translate('LLL:EXT:slub_digitalcollections/Resources/Private/Language/locallang_kitodo.xlf:metadata.' . $entry->getIndexName()),
+            ];
+        }
+
+        $listedMetadataInfo = [];
+        foreach ($listedMetadata as $entry) {
+            $listedMetadataInfo[] = [
+                'indexName' => $entry->getIndexName(),
+                'label' => LocalizationUtility::translate('LLL:EXT:slub_digitalcollections/Resources/Private/Language/locallang_kitodo.xlf:metadata.' . $entry->getIndexName()),
+            ];
+        }
+
+        $structures = $this->structureRepository->findAll();
+        $structuresInfo = [];
+        foreach ($structures as $structure) {
+            $structuresInfo[] = [
+                'indexName' => $structure->getIndexName(),
+                'label' => LocalizationUtility::translate('LLL:EXT:slub_digitalcollections/Resources/Private/Language/locallang_kitodo.xlf:structure.' . $structure->getIndexName()),
+            ];
+        }
 
         // Pagination of Results
         // pass the currentPage to the fluid template to calculate current index of search result
@@ -152,7 +177,9 @@ class SingleCollectionController extends \TYPO3\CMS\Extbase\Mvc\Controller\Actio
         }
 
         $this->view->assign('solrSearch', $solrSearch);
-        $this->view->assign('metadata', $metadata);
+        $this->view->assign('sortableMetadata', $sortableMetadata);
+        $this->view->assign('listedMetadata', $listedMetadataInfo);
+        $this->view->assign('structures', $structuresInfo);
         $this->view->assign('widgetPage', $widgetPage);
         $this->view->assign('lastSearch', $searchParams);
         $this->view->assign('rawResults', $solrSearch->getSolrResults());
