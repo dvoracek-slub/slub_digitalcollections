@@ -26,6 +26,7 @@ namespace Slub\SlubDigitalcollections\Controller;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 use Kitodo\Dlf\Common\Document;
+use Kitodo\Dlf\Common\Helper;
 use Kitodo\Dlf\Domain\Repository\DocumentRepository;
 use Kitodo\Dlf\Domain\Repository\StructureRepository;
 use Kitodo\Dlf\Domain\Repository\CollectionRepository;
@@ -176,6 +177,17 @@ class SingleCollectionController extends \TYPO3\CMS\Extbase\Mvc\Controller\Actio
             $widgetPage = ['currentPage' => 1];
         }
 
+        $apiSettings = Helper::encrypt(json_encode([
+            'solrcore' => $this->settings['solrcore'],
+            'storagePid' => $this->settings['storagePid'],
+            'collections' => $this->settings['collections'],
+            'paginate' => [
+                'itemsPerPage' => $this->settings['list']['paginate']['itemsPerPage'],
+            ],
+            'pageViewPid' => $this->settings['kitodo']['pageView'],
+        ]));
+
+        $this->view->assign('apiSettings', $apiSettings);
         $this->view->assign('solrSearch', $solrSearch);
         $this->view->assign('sortableMetadata', $sortableMetadata);
         $this->view->assign('listedMetadata', $listedMetadataInfo);
